@@ -13,6 +13,7 @@ import com.weg.DriveFast.infrastructure.repository.LocacaoRepository;
 import com.weg.DriveFast.infrastructure.repository.VeiculoRepository;
 import com.weg.DriveFast.service.dto.locacao.LocacaoCreateDTO;
 import com.weg.DriveFast.service.dto.locacao.LocacaoResponseDTO;
+import com.weg.DriveFast.service.dto.mensagem.MensagemDTO;
 import com.weg.DriveFast.service.mapper.LocacaoMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -55,5 +56,25 @@ public class LocacaoService {
 
     public List<LocacaoResponseDTO> listarLocacoes(){
         return mapper.toResponseDTOList(repository.findAll());
+    }
+
+    public List<LocacaoResponseDTO> buscarLocacaoPorCliente(Long idCliente){
+        return mapper.toResponseDTOList(repository.buscarLocacoesPorClientes(idCliente));
+    }
+
+    public MensagemDTO encerrarLocacao(Long id){
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("Locação não existe!");
+        }
+
+        repository.deleteById(id);
+
+        Veiculo veiculo = veiculoRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Veículo não encontrado!"));
+
+        veiculo.setDisponivel(true);
+        veiculoRepository.save(veiculo);
+
+        return new MensagemDTO("Veículo devolvido e locação encerrada!");
     }
 }
