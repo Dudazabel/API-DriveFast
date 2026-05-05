@@ -1,5 +1,7 @@
 package com.weg.DriveFast.service.mapper;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.weg.DriveFast.domain.entity.Locacao;
@@ -15,6 +17,13 @@ public class LocacaoMapper {
             locacao.getValorTotal(), 
             locacao.getCliente().getNome(), 
             locacao.getVeiculo().getModelo());
+    }
+
+    public List<LocacaoResponseDTO> toResponseDTOList(List<Locacao> locacoes){
+        return locacoes
+            .stream()
+            .map(this::toResponseDTO)
+            .toList();
     }
 
 }

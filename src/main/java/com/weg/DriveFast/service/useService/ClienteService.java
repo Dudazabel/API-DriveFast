@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.weg.DriveFast.domain.entity.Cliente;
+import com.weg.DriveFast.infrastructure.projections.ClienteGastoProjection;
 import com.weg.DriveFast.infrastructure.repository.ClienteRepository;
 import com.weg.DriveFast.service.dto.cliente.ClienteCreateDTO;
+import com.weg.DriveFast.service.dto.cliente.ClienteGastoDTO;
 import com.weg.DriveFast.service.dto.cliente.ClienteResponseDTO;
 import com.weg.DriveFast.service.dto.cliente.ClienteUpdateDTO;
 import com.weg.DriveFast.service.dto.mensagem.MensagemDTO;
@@ -33,6 +35,11 @@ public class ClienteService {
     public ClienteResponseDTO buscarClientePorId(Long id){
         return mapper.toResponseDTO(repository.findById(id)
             .orElseThrow(() -> new RuntimeException("Cliente não encontrado!")));
+    }
+
+    public List<ClienteGastoDTO> buscarRelatorioGastosCliente(){
+        List<ClienteGastoProjection> cliente = repository.relatorioGastos();
+        return mapper.toClienteGastoDTOList(cliente);
     }
 
     public ClienteResponseDTO atualizarCliente(ClienteUpdateDTO cliente, Long clienteId){
