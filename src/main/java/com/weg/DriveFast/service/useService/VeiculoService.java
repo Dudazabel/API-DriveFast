@@ -35,8 +35,8 @@ public class VeiculoService {
         .orElseThrow(() -> new RuntimeException("Veículo não encontrado")));
     }
 
-    public List<Veiculo> buscarPorDisponibilidade(){
-        return repository.findByDisponivelTrue();
+    public List<VeiculoResponseDTO> buscarPorDisponibilidade(){
+        return mapper.toResponseDTOList(repository.findByDisponivelTrue());
     }
 
     public VeiculoResponseDTO atualizarVeiculo(Long id, VeiculoUpdateDTO veiculo){
